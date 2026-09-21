@@ -9,20 +9,20 @@
   <link rel="stylesheet" href="css/components.css">
   <script type="module" src="js/app.js"></script>
 </head>
-<body>
+<body id="app-body">
 
-  <header>
+  <header id="main-header">
     <h1>Antología de Sonetos</h1>
-    <nav>
-      <label>Elegir soneto</label>
-      <select>
+    <nav aria-label="Selección de obras">
+      <label for="soneto-select">Elegir soneto</label>
+      <select id="soneto-select" aria-controls="soneto-display">
         <!-- Opciones inyectadas dinámicamente -->
       </select>
     </nav>
   </header>
 
-  <main>
-    <article >
+  <main id="main-content">
+    <article id="soneto-display" aria-live="polite">
       <!-- Contenido renderizado por la Vista -->
     </article>
   </main>

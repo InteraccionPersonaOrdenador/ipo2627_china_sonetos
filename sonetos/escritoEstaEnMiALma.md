@@ -2,7 +2,7 @@ Titulo: "Escrito está en mi alma"
 
 Autor: "Garcilaso de la Vega"
 
-Soneto:
+Soneto
 
 Escrito está en mi alma vuestro gesto,
 y cuanto yo escribir de vos deseo;
