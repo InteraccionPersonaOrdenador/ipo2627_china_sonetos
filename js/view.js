@@ -35,7 +35,7 @@ export function populateSelector(options, activeId) {
 /**
  * Actualiza el texto visible de una opción concreta por su ID.
  * @param {string} id - Identificador del soneto.
- * @param {string} newLabel - Cadena formateada (ej. "Título — Autor").
+ * @param {string} newLabel - Cadena formateada (ej. "Título").
  */
 export function updateOptionTitle(id, newLabel) {
   const selectElement = document.getElementById("soneto-select");
@@ -90,10 +90,10 @@ export function renderSoneto(soneto) {
     .map((stanza, index) => {
       const type = stanza.length === 4 ? "cuarteto" : "terceto";
       const versesHtml = stanza
-        .map(verse => `<span class="c-verse">${verse}</span>`)
+        .map(verse => `<span class="c-verse">${verse}</span><br>`)
         .join("");
 
-      return `<div class="c-stanza c-stanza--${type}" aria-label="Estrofa ${index + 1}">${versesHtml}</div>`;
+      return `<p class="c-stanza c-stanza--${type}" aria-label="Estrofa ${index + 1}">${versesHtml}</p><br>`;
     })
     .join("");
 
@@ -102,8 +102,7 @@ export function renderSoneto(soneto) {
       <h2 class="c-soneto-header__title">${soneto.title}</h2>
       <span class="c-soneto-header__author">${soneto.author}</span>
     </header>
-    <div class="c-soneto-body">
       ${stanzasHtml}
-    </div>
+    
   `;
 }
