@@ -30,6 +30,8 @@ async function initApp() {
     onSelectChange: loadAndDisplaySoneto
   });
 
+  // 3. Mostrar el soneto seleccionado por defecto al abrir la aplicación
+  await loadAndDisplaySoneto(initialId);
 }
 
 document.addEventListener("DOMContentLoaded", initApp);

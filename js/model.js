@@ -1,30 +1,30 @@
 // js/model.js
 
-// Lista de archivos Markdown disponibles en la carpeta /sonetos
+// Lista de archivos JSON disponibles en la carpeta /sonetos
 const sonetoFiles = [
   { 
     id: "mientrasPorCompetir", 
-    path: "sonetos/mientrasPorCompetir.md",
+    path: "sonetos/mientrasPorCompetir.json",
     title: "Mientras por competir con tu cabello" 
   },
   { 
     id: "eraseUnHombre", 
-    path: "sonetos/eraseUnHombre.md",
+    path: "sonetos/eraseUnHombre.json",
     title: "A una nariz" 
   },
   { 
     id: "escritoEstaEnMiAlma", 
-    path: "sonetos/escritoEstaEnMiAlma.md",
+    path: "sonetos/escritoEstaEnMiAlma.json",
     title: "Escrito está en mi alma " 
   },
   { 
     id: "mireLosMuros", 
-    path: "sonetos/mireLosMuros.md",
+    path: "sonetos/mireLosMuros.json",
     title: "Miré los muros " 
   },
   { 
     id: "unSonetoMeManda", 
-    path: "sonetos/unSonetoMeManda.md",
+    path: "sonetos/unSonetoMeManda.json",
     title: "Definición de un soneto" 
   }
 ];
@@ -54,8 +54,9 @@ export function setCurrentId(id) {
 }
 
 /**
- * Descarga y parsea el soneto solicitado mediante fetch.
+ * Descarga y procesa el soneto solicitado mediante fetch.
  * Utiliza caché para evitar descargas repetidas.
+ * El nombre de la función se mantiene para no modificar sus consumidores.
  */
 export async function fetchAndParseSoneto(id) {
   if (cache.has(id)) {
@@ -72,59 +73,46 @@ export async function fetchAndParseSoneto(id) {
     throw new Error(`Error al leer el archivo ${sonetoInfo.path}`);
   }
 
-  const rawMarkdown = await response.text();
-  const parsed = parseSonetoMarkdown(rawMarkdown, id);
+  const data = await response.json();
+  const parsed = validateSonetoData(data, id, sonetoInfo.path);
 
   cache.set(id, parsed);
   return parsed;
 }
 
 /**
- * Parsea el texto del archivo .md extrayendo metadatos y estructurando estrofas.
+ * Comprueba que el JSON contiene la estructura esperada por la vista.
  */
+function validateSonetoData(data, id, path) {
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new TypeError(`Formato JSON no válido en ${path}`);
+  }
 
-function parseSonetoMarkdown(text, defaultId) {
-  // En js/model.js dentro de parseSonetoMarkdown(text, defaultId):
+  if (typeof data.title !== "string" || data.title.trim() === "") {
+    throw new TypeError(`El soneto ${id} no tiene un título válido`);
+  }
 
-// 1. Extraer título y autor
-const titleMatch = text.match(/#*\s*T[ií]tulo:\s*["']?([^"\r\n]+)["']?/i);
-const authorMatch = text.match(/#*\s*Autor:\s*["']?([^"\r\n]+)["']?/i);
+  if (typeof data.author !== "string" || data.author.trim() === "") {
+    throw new TypeError(`El soneto ${id} no tiene un autor válido`);
+  }
 
-const title = titleMatch ? titleMatch[1].trim() : defaultId;
-const author = authorMatch ? authorMatch[1].trim() : "Anónimo";
+  const stanzaLengths = [4, 4, 3, 3];
+  const validStanzas = Array.isArray(data.stanzas)
+    && data.stanzas.length === stanzaLengths.length
+    && data.stanzas.every((stanza, index) =>
+      Array.isArray(stanza)
+      && stanza.length === stanzaLengths[index]
+      && stanza.every(verse => typeof verse === "string" && verse.trim() !== "")
+    );
 
-// 2. Extraer los versos procesando cada línea
-const allLines = text.split(/\r?\n/).map(line => line.trim());
+  if (!validStanzas) {
+    throw new TypeError(`El soneto ${id} debe tener estrofas con estructura 4-4-3-3`);
+  }
 
-const verses = allLines.filter(line => {
-  // Ignorar líneas vacías
-  if (line.length === 0) return false;
-
-  // Ignorar líneas que empiezan por Titulo: o Autor:
-  if (/^#*\s*T[ií]tulo:/i.test(line)) return false;
-  if (/^#*\s*Autor:/i.test(line)) return false;
-
-  // Ignorar únicamente si la línea entera es la palabra "Soneto" (o "# Soneto")
-  if (/^#*\s*Soneto\s*$/i.test(line)) return false;
-
-  // Ignorar separadores markdown tipo --- o ***
-  if (/^[-*_]{3,}$/.test(line)) return false;
-
-  return true;
-});
-
-// 3. Agrupar métricamente en cuartetos (4, 4) y tercetos (3, 3)
-const stanzas = [
-  verses.slice(0, 4),
-  verses.slice(4, 8),
-  verses.slice(8, 11),
-  verses.slice(11, 14)
-].filter(stanza => stanza.length > 0);
-
-return {
-  id: defaultId,
-  title,
-  author,
-  stanzas
-};
+  return {
+    id,
+    title: data.title.trim(),
+    author: data.author.trim(),
+    stanzas: data.stanzas
+  };
 }
