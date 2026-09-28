@@ -1,1 +1,21 @@
-Reglas_Globales
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+#app-body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+label {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}Reglas_Globales

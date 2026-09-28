@@ -84,53 +84,47 @@ export async function fetchAndParseSoneto(id) {
  */
 
 function parseSonetoMarkdown(text, defaultId) {
-  // 1. Extraer título y autor de forma tolerante a tildes y formatos
-  const titleMatch = text.match(/#*\s*T[ií]tulo:\s*["']?([^"\r\n]+)["']?/i);
-  const authorMatch = text.match(/#*\s*Autor:\s*["']?([^"\r\n]+)["']?/i);
+  // En js/model.js dentro de parseSonetoMarkdown(text, defaultId):
 
-  const title = titleMatch ? titleMatch[1].trim() : defaultId;
-  const author = authorMatch ? authorMatch[1].trim() : "Anónimo";
+// 1. Extraer título y autor
+const titleMatch = text.match(/#*\s*T[ií]tulo:\s*["']?([^"\r\n]+)["']?/i);
+const authorMatch = text.match(/#*\s*Autor:\s*["']?([^"\r\n]+)["']?/i);
 
-  // 2. Aislar el cuerpo poético:
-  // Si existe la palabra 'Soneto', corta tras ella; si no, limpia las líneas de metadatos.
-  let sonetoBody = "";
-  if (/Soneto/i.test(text)) {
-    const parts = text.split(/#*\s*Soneto[^\r\n]*[\r\n]+/i);
-    sonetoBody = parts[1] || "";
-  } else {
-    sonetoBody = text
-      .split(/\r?\n/)
-      .filter(line => !/^#*\s*(T[ií]tulo|Autor):/i.test(line.trim()))
-      .join("\n");
-  }
+const title = titleMatch ? titleMatch[1].trim() : defaultId;
+const author = authorMatch ? authorMatch[1].trim() : "Anónimo";
 
-  // 3. Extracción de versos:
-  // Intento A: Dividir por saltos de línea habituales
-  let verses = sonetoBody
-    .split(/\r?\n/)
-    .map(line => line.trim())
-    .filter(line => line.length > 0 && !/^[-*_]{3,}$/.test(line));
+// 2. Extraer los versos procesando cada línea
+const allLines = text.split(/\r?\n/).map(line => line.trim());
 
-  // Intento B: Si vino todo en 1 o pocas líneas, dividir por signos de puntuación final de verso (; o .)
-  if (verses.length < 14 && sonetoBody.includes(";")) {
-    verses = sonetoBody
-      .split(/(?<=[;.\n])\s+/)
-      .map(v => v.trim())
-      .filter(v => v.length > 0);
-  }
+const verses = allLines.filter(line => {
+  // Ignorar líneas vacías
+  if (line.length === 0) return false;
 
-  // 4. Agrupar métricamente en cuartetos (4, 4) y tercetos (3, 3)
-  const stanzas = [
-    verses.slice(0, 4),
-    verses.slice(4, 8),
-    verses.slice(8, 11),
-    verses.slice(11, 14)
-  ].filter(stanza => stanza.length > 0);
+  // Ignorar líneas que empiezan por Titulo: o Autor:
+  if (/^#*\s*T[ií]tulo:/i.test(line)) return false;
+  if (/^#*\s*Autor:/i.test(line)) return false;
 
-  return {
-    id: defaultId,
-    title,
-    author,
-    stanzas
-  };
+  // Ignorar únicamente si la línea entera es la palabra "Soneto" (o "# Soneto")
+  if (/^#*\s*Soneto\s*$/i.test(line)) return false;
+
+  // Ignorar separadores markdown tipo --- o ***
+  if (/^[-*_]{3,}$/.test(line)) return false;
+
+  return true;
+});
+
+// 3. Agrupar métricamente en cuartetos (4, 4) y tercetos (3, 3)
+const stanzas = [
+  verses.slice(0, 4),
+  verses.slice(4, 8),
+  verses.slice(8, 11),
+  verses.slice(11, 14)
+].filter(stanza => stanza.length > 0);
+
+return {
+  id: defaultId,
+  title,
+  author,
+  stanzas
+};
 }

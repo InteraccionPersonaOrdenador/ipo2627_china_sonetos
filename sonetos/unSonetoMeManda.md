@@ -1,4 +1,4 @@
-Titulo: "Definición de soneto"
+Titulo: "Definición de un soneto"
 
 Autor: Lope de Vega
 
