@@ -14,7 +14,7 @@
   --font-size-verse: 1.15rem;
 
   /* Espaciado de estrofas y versos (Gestalt) */
-  --gap-verse: 0.35rem;
+  --gap-verse: 0.1rem;
   --gap-stanza: 1.6rem;
   --padding-card: 2.5rem;
 }
@@ -40,7 +40,7 @@
   --color-accent: #1e3a8a;
   --color-border: #ccd6e0;
   --color-border-hover: #94a3b8;
-  --font-serif: "Courier New", monospace;
+  --font-serif: "Baskerville", "Georgia", serif;
 }
 
 /* 3. Quevedo: mireLosMuros (Ruinas, ceniza, memento mori) */
@@ -64,7 +64,7 @@
   --color-accent: #943547;
   --color-border: #edd2d6;
   --color-border-hover: #c9939c;
-  --font-serif: "Palatino", "Palatino Linotype", serif;
+  --font-serif: "Baskerville", "Georgia", serif;
 }
 
 /* 5. Lope de Vega: unSonetoMeManda (Metapoético, ágil, fresco) */
@@ -76,5 +76,5 @@
   --color-accent: #256f4d;
   --color-border: #c4ded0;
   --color-border-hover: #8cb89f;
-  --font-serif: "Didot", "Bodoni MT", serif;
+  --font-serif: "Baskerville", "Georgia", serif;
 }

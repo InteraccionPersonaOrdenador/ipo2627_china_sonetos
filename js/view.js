@@ -90,10 +90,10 @@ export function renderSoneto(soneto) {
     .map((stanza, index) => {
       const type = stanza.length === 4 ? "cuarteto" : "terceto";
       const versesHtml = stanza
-        .map(verse => `<span class="c-verse">${verse}</span><br>`)
+        .map(verse => `<span class="c-verse">${verse}</span>`)
         .join("");
 
-      return `<p class="c-stanza c-stanza--${type}" aria-label="Estrofa ${index + 1}">${versesHtml}</p><br>`;
+      return `<p class="c-stanza c-stanza--${type}" aria-label="Estrofa ${index + 1}">${versesHtml}</p>`;
     })
     .join("");
 
@@ -102,7 +102,8 @@ export function renderSoneto(soneto) {
       <h2 class="c-soneto-header__title">${soneto.title}</h2>
       <span class="c-soneto-header__author">${soneto.author}</span>
     </header>
+    <blockquote class="c-soneto-body"">
       ${stanzasHtml}
-    
+    </blockquote>
   `;
 }

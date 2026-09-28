@@ -113,14 +113,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start; /* Alinea los versos a la izquierda dentro del bloque */
-  gap: var(--gap-stanza);   /* Distancia clara entre estrofas */
+  row-gap: var(--gap-stanza);   /* Distancia clara entre estrofas */
 }
 
 .c-stanza {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--gap-verse);    /* Proximidad entre versos */
+  align-items: flex-start; /* Alinea los versos a la izquierda dentro de la estrofa */
+  row-gap: var(--gap-verse);    /* Proximidad entre versos */
 }
 
 .c-verse {
@@ -143,3 +143,4 @@
 .c-status--error {
   color: var(--color-accent);
 }
+
