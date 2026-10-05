@@ -13,7 +13,7 @@ async function handleSonetoSelection(id) {
   try {
     const soneto = await Model.fetchAndParseSoneto(id);
     View.renderSoneto(soneto);
-    View.updateOptionTitle(id, `${soneto.title} — ${soneto.author}`);
+    View.updateOptionTitle(id, soneto.title);
   } catch (error) {
     console.error(error);
     View.showError("No se pudo cargar el soneto solicitado.");
@@ -24,7 +24,7 @@ async function handleSonetoSelection(id) {
  * Inicializa la aplicación:
  * puebla los controles y registra los listeners de eventos.
  */
-export function initApp() {
+export async function initApp() {
   const catalog = Model.getSonetoCatalog();
   const initialId = Model.getCurrentId();
 
@@ -35,7 +35,7 @@ export function initApp() {
   View.setupEventListeners({
     onSelectChange: handleSonetoSelection
   });
-}
 
-// Disparar el arranque al cargar el documento
-document.addEventListener("DOMContentLoaded", initApp);
+  // Mostrar el soneto seleccionado por defecto al abrir la aplicación.
+  await handleSonetoSelection(initialId);
+}

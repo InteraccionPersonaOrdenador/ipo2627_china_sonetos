@@ -48,7 +48,7 @@ export function updateOptionTitle(id, newLabel) {
 }
 
 /**
- * Aplica el esquema cromático y tipográfico dinámico en el body.
+ * Selecciona el acento cromático del soneto en el body.
  * @param {string} sonetoId - Identificador para activar body[data-soneto="..."] en CSS.
  */
 export function applyTheme(sonetoId) {
@@ -102,7 +102,7 @@ export function renderSoneto(soneto) {
       <h2 class="c-soneto-header__title">${soneto.title}</h2>
       <span class="c-soneto-header__author">${soneto.author}</span>
     </header>
-    <blockquote class="c-soneto-body"">
+    <blockquote class="c-soneto-body">
       ${stanzasHtml}
     </blockquote>
   `;
