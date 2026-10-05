@@ -120,19 +120,11 @@
 }
 
 .c-stanza {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Alinea los versos a la izquierda dentro de la estrofa */
-  row-gap: var(--gap-verse);    /* Proximidad entre versos */
-}
-
-.c-verse {
   font-family: var(--font-serif);
   font-size: var(--font-size-verse);
-  line-height: 1.45;
+  line-height: calc(1.45em + var(--gap-verse));
   color: var(--color-text-main);
-  white-space: pre-wrap;
-  transition: font-family 0.35s ease, color 0.35s ease;
+  text-align: left;
 }
 
 /* Mensajes informativos de carga y error */

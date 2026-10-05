@@ -78,32 +78,40 @@ export function showError(message) {
 }
 
 /**
- * Renderiza el soneto completo estructurado en cuartetos y tercetos
- * utilizando clases compatibles con el diseño Flexbox.
+ * Renderiza el soneto con un párrafo por estrofa y un salto de línea
+ * entre versos. El espacio entre estrofas se controla desde CSS.
  * @param {Object} soneto - Objeto con title, author y array de stanzas.
  */
 export function renderSoneto(soneto) {
   const displayElement = document.getElementById("soneto-display");
   if (!displayElement) return;
 
-  const stanzasHtml = soneto.stanzas
-    .map((stanza, index) => {
-      const type = stanza.length === 4 ? "cuarteto" : "terceto";
-      const versesHtml = stanza
-        .map(verse => `<span class="c-verse">${verse}</span>`)
-        .join("");
+  const header = document.createElement("header");
+  header.className = "c-soneto-header";
 
-      return `<p class="c-stanza c-stanza--${type}" aria-label="Estrofa ${index + 1}">${versesHtml}</p>`;
-    })
-    .join("");
+  const title = document.createElement("h2");
+  title.className = "c-soneto-header__title";
+  title.textContent = soneto.title;
 
-  displayElement.innerHTML = `
-    <header class="c-soneto-header">
-      <h2 class="c-soneto-header__title">${soneto.title}</h2>
-      <span class="c-soneto-header__author">${soneto.author}</span>
-    </header>
-    <blockquote class="c-soneto-body">
-      ${stanzasHtml}
-    </blockquote>
-  `;
+  const author = document.createElement("span");
+  author.className = "c-soneto-header__author";
+  author.textContent = soneto.author;
+  header.append(title, author);
+
+  const body = document.createElement("blockquote");
+  body.className = "c-soneto-body";
+
+  soneto.stanzas.forEach(stanza => {
+    const paragraph = document.createElement("p");
+    const type = stanza.length === 4 ? "cuarteto" : "terceto";
+    paragraph.className = `c-stanza c-stanza--${type}`;
+    stanza.forEach((verse, verseIndex) => {
+      if (verseIndex > 0) paragraph.append(document.createElement("br"));
+      paragraph.append(document.createTextNode(verse));
+    });
+
+    body.append(paragraph);
+  });
+
+  displayElement.replaceChildren(header, body);
 }

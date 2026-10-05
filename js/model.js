@@ -5,7 +5,7 @@ const sonetoFiles = [
   { 
     id: "mientrasPorCompetir", 
     path: "sonetos/mientrasPorCompetir.json",
-    title: "Mientras por competir con tu cabello" 
+    title: "Mientras por competir"
   },
   { 
     id: "eraseUnHombre", 
@@ -15,17 +15,17 @@ const sonetoFiles = [
   { 
     id: "escritoEstaEnMiAlma", 
     path: "sonetos/escritoEstaEnMiAlma.json",
-    title: "Escrito está en mi alma " 
+    title: "Escrito está en mi alma"
   },
   { 
     id: "mireLosMuros", 
     path: "sonetos/mireLosMuros.json",
-    title: "Miré los muros " 
+    title: "Miré los muros"
   },
   { 
     id: "unSonetoMeManda", 
     path: "sonetos/unSonetoMeManda.json",
-    title: "Definición de un soneto" 
+    title: "Definición de soneto"
   }
 ];
 
